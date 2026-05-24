@@ -1,11 +1,3 @@
-# Verification
-#    docker build -t threatmod .
-#    docker run -p 80:80 threatmod
-#    curl http://localhost:8080/health
-
-#Deliverables
-#- Screenshot showing container running successfully
-
 ## STAGE 1: BUILD
 
 FROM golang@sha256:47ce5636e9936b2c5cbf708925578ef386b4f8872aec74a67bd13a627d242b19 AS builder
@@ -88,6 +80,10 @@ COPY --from=builder --chown=memos:memos /memos/build/memos /memos
 # take file inside '/memos/build/memos' (inside of that stage's repo) and place inside '/memos' (of this new stages repo)
 # Change ownership of /memos to user 'memos' and group 'memos'
 
+RUN mkdir -p /var/opt/memos && \
+    chown memos:memos /var/opt/memos
+# creeated the directory for the volume mount and gave the group and user the permissions to edit it
+
 USER memos
 # non-root user, changes into user
 
@@ -95,9 +91,9 @@ EXPOSE 8081
 # Documentation purposes
 
 HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
-   CMD wget -qo- http://localhost:8081/healthz || exit 1
+   CMD wget -q -O - http://localhost:8081/healthz || exit 1
 # HEALTHCHECK is a command to check if the container is healthy
-# wget is alpine's version of curl, -q means quiet, -o- means to output to stdout (Standard output) instead of file, this means to print in terminal rather than a log in the container
+# wget is alpine's version of curl, -q means quiet, -O- means to output to stdout (Standard output) instead of file, this means to print in terminal rather than a log in the container
 # || exit 1 means if wget fails then exit with code 1 which is what tells docker the container is unhealthy.
 # CMD here is part of HEALTHCHECK and separate from the other CMD
 

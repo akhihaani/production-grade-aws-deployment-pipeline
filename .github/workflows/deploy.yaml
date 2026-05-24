@@ -1,0 +1,67 @@
+name: memos-CI-CD-Pipeline
+# Display name in GitHub UI
+
+# What triggers the workflow
+on:
+  workflow_dispatch: # manually run from the Github UI
+
+permissions:
+  id-token: write    # required for OIDC — lets the workflow request a JWT
+  contents: read     # needed for actions/checkout to clone the repo
+
+# What the workflow actualy does
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repo # Clones your repo onto the VM that runs this workflow
+        uses: actions/checkout@v4
+
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Install tflint
+        uses: terraform-linters/setup-tflint@v4
+
+      - name: Terraform Init
+        working-directory: infra
+        run: terraform init
+        
+      - name: Terraform Format
+        working-directory: infra
+        run: terraform fmt -check -recursive
+        
+      - name: Terraform Validate
+        working-directory: infra
+        run: terraform validate
+        
+      - name: Terraform Lint
+        working-directory: infra
+        run: tflint
+        
+      - name: Terraform Plan
+        working-directory: infra
+        run: terraform plan
+        
+      - name: Terraform Apply
+        working-directory: infra
+        run: terraform apply -auto-approve
+
+      - name: Render task definition
+        id: render-task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: infra/modules/ecs/task-definition.json
+          container-name: memos
+          image: 310829530244.dkr.ecr.eu-west-2.amazonaws.com/memos:${{ github.sha }}
+
+      - name: Deploy to ECS
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+        with:
+          task-definition: ${{ steps.render-task-def.outputs.task-definition }}
+          service: memos_service
+          cluster: memos_cluster
+          wait-for-service-stability: true
+
+      - name: Post-Deploy Health check
+        run: curl https://memos.abuniyyah.uk/healthz

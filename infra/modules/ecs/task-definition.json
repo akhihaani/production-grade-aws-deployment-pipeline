@@ -1,0 +1,26 @@
+{
+  "family": "memos_task_family",
+  "requiresCompatibilities": ["FARGATE"],
+  "networkMode": "awsvpc",
+  "cpu": "256",
+  "memory": "512",
+  "executionRoleArn": "arn:aws:iam::310829530244:role/memos_role_1",
+  "containerDefinitions": [
+    {
+      "name": "memos",
+      "image": "310829530244.dkr.ecr.eu-west-2.amazonaws.com/memos:09495e4",
+      "essential": true,
+      "portMappings": [
+        { "containerPort": 8081 }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "memos_cloudwatch_log_group",
+          "awslogs-region": "eu-west-2",
+          "awslogs-stream-prefix": "memos"
+        }
+      }
+    }
+  ]
+}
