@@ -20,22 +20,22 @@ RUN apt-get update && apt-get install -y curl && \
 # apt-get install -y nodejs npm: installs Node and npm
 # npm install -g pnpm: uses npm to install pnpm globally
 
-COPY web/package.json .
-COPY web/pnpm-lock.yaml .
+COPY web/package.json ./web/
+COPY web/pnpm-lock.yaml ./web/
 # Copied pnpm dependency files to container filesystem
 # These are instruction for pnpm on what to install and which version
 
 RUN --mount=type=cache,target=/root/.pnpm-store \
-    pnpm install
+    cd web && pnpm install
 # Install dependencies
 # The mount is a buildKit feature, we are keeping this cache the same between builds
 # so every subsequent time we build the image this cache stays
 
-COPY web .
+COPY web ./web
 # Copied folder 'web' into container file system
 # This was the only folder needed for pnpm dependencies, hence the 'web' name since it's about files for the website
 
-RUN pnpm release
+RUN cd web && pnpm release
 # Turn dependencies into static files, rest of 'web' folder was needed for this
 # so this command was ran after copying that
 # Also this way, if web folder changes we don't need to reinstall dependencies
