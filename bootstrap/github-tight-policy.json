@@ -196,54 +196,57 @@
 			"Resource": "arn:aws:kms:eu-west-2:310829530244:key/*"
 		},
 		{
-      "Effect": "Allow",
-      "Action": [
-        "logs:CreateLogGroup",
-        "logs:DeleteLogGroup"
-      ],
-      "Resource": "arn:aws:logs:eu-west-2:310829530244:log-group:*"
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "iam:GetRole",
-        "iam:DeleteRole",
-        "iam:DetachRolePolicy",
-        "iam:ListRolePolicies",
-        "iam:ListAttachedRolePolicies",
-        "iam:TagRole",
-        "iam:UntagRole",
-        "iam:ListInstanceProfilesForRole",
-        "ec2:DescribeAvailabilityZones",
-        "ec2:DescribeRegions",
-        "ecs:ListClusters",
-        "route53:GetChange",
-        "elasticloadbalancing:DescribeTargetHealth",
-        "acm:AddTagsToCertificate",
-        "acm:ListTagsForCertificate",
-        "acm:RemoveTagsFromCertificate",
-        "s3:GetBucketWebsite",
-        "s3:GetBucketCORS",
-        "s3:GetBucketObjectLockConfiguration",
-        "s3:GetBucketPolicy",
-        "s3:GetBucketPolicyStatus",
-        "elasticloadbalancing:DescribeTargetGroups",
-        "elasticloadbalancing:DescribeTargetGroupAttributes",
-        "cloudformation:GetResource",
-        "ec2:DescribeVpcs",
-        "ec2:DescribeSecurityGroups",
-        "ec2:DetachInternetGateway",
-        "ec2:DeleteNetworkInterface",
-        "s3express:GetBucketPolicy",
-        "s3:GetLifecycleConfiguration",
-        "s3:GetReplicationConfiguration",
-        "acm:RequestCertificate",
-        "ec2:AssociateRouteTable",
-        "ec2:DisassociateRouteTable",
-        "ec2:CreateSecurityGroup",
-        "ec2:DeleteSecurityGroup"
-      ],
-      "Resource": "*"
-    }
-  ]
+			"Effect": "Allow",
+			"Action": [
+				"logs:CreateLogGroup",
+				"logs:DeleteLogGroup"
+			],
+			"Resource": "arn:aws:logs:eu-west-2:310829530244:log-group:*"
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				"iam:GetRole",
+				"iam:DeleteRole",
+				"iam:DetachRolePolicy",
+				"iam:ListRolePolicies",
+				"iam:ListAttachedRolePolicies",
+				"iam:TagRole",
+				"iam:UntagRole",
+				"iam:ListInstanceProfilesForRole",
+				"ec2:DescribeAvailabilityZones",
+				"ec2:DescribeRegions",
+				"ecs:ListClusters",
+				"route53:GetChange",
+				"elasticloadbalancing:DescribeTargetHealth",
+				"acm:AddTagsToCertificate",
+				"acm:ListTagsForCertificate",
+				"acm:RemoveTagsFromCertificate",
+				"s3:GetBucketWebsite",
+				"s3:GetBucketCORS",
+				"s3:GetBucketObjectLockConfiguration",
+				"s3:GetBucketPolicy",
+				"s3:GetBucketPolicyStatus",
+				"elasticloadbalancing:DescribeTargetGroups",
+				"elasticloadbalancing:DescribeTargetGroupAttributes",
+				"cloudformation:GetResource",
+				"ec2:DescribeVpcs",
+				"ec2:DescribeSecurityGroups",
+				"ec2:DetachInternetGateway",
+				"ec2:DeleteNetworkInterface",
+				"s3express:GetBucketPolicy",
+				"s3:GetLifecycleConfiguration",
+				"s3:GetReplicationConfiguration",
+				"acm:RequestCertificate",
+				"ec2:AssociateRouteTable",
+				"ec2:DisassociateRouteTable",
+				"ec2:CreateSecurityGroup",
+				"ec2:DeleteSecurityGroup",
+				"route53:ListResourceRecordSets",
+				"ecs:CreateService",
+				"ecs:CreateCluster"
+			],
+			"Resource": "*"
+		}
+	]
 }
