@@ -16,7 +16,7 @@ resource "aws_subnet" "memos_subnet_1" {
   vpc_id                  = aws_vpc.memos_vpc.id
   cidr_block              = "10.0.1.0/24"
   map_public_ip_on_launch = true
-  availability_zone       = "eu-west-2a"
+  availability_zone       = "${var.region}a"
 
   tags = var.tags
 }
@@ -25,7 +25,7 @@ resource "aws_subnet" "memos_subnet_2" {
   vpc_id                  = aws_vpc.memos_vpc.id
   cidr_block              = "10.0.2.0/24"
   map_public_ip_on_launch = true
-  availability_zone       = "eu-west-2b"
+  availability_zone       = "${var.region}b"
 
   tags = var.tags
 }
@@ -34,7 +34,7 @@ resource "aws_subnet" "memos_subnet_3" {
   vpc_id                  = aws_vpc.memos_vpc.id
   cidr_block              = "10.0.3.0/24"
   map_public_ip_on_launch = true
-  availability_zone       = "eu-west-2c"
+  availability_zone       = "${var.region}c"
 
   tags = var.tags
 }

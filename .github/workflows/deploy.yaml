@@ -1,7 +1,5 @@
 name: memos-deploy-pipeline
-# Display name in GitHub UI
 
-# What triggers the workflow
 on:
   workflow_dispatch: # manually run from the Github UI
 
@@ -9,7 +7,6 @@ permissions:
   id-token: write    # required for OIDC — lets the workflow request a JWT
   contents: read     # needed for actions/checkout to clone the repo
 
-# What the workflow actualy does
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -20,8 +17,8 @@ jobs:
       - name: Configure AWS
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::310829530244:role/memos_github_role
-          aws-region: eu-west-2
+          role-to-assume: arn:aws:iam::${{ vars.AWS_ROLE_ARN }}:role/memos_github_role
+          aws-region: ${{ vars.AWS_REGION }}
 
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v4
@@ -55,7 +52,7 @@ jobs:
         with:
           task-definition: infra/modules/ecs/task-definition.json
           container-name: memos
-          image: 310829530244.dkr.ecr.eu-west-2.amazonaws.com/memos:${{ github.sha }}
+          image: ${{ vars.ECR_REPO }}:${{ github.sha }}
 
       - name: Deploy to ECS
         uses: aws-actions/amazon-ecs-deploy-task-definition@v2
@@ -66,4 +63,4 @@ jobs:
           wait-for-service-stability: true
 
       - name: Post-Deploy Health check
-        run: curl https://memos.abuniyyah.uk/healthz
+        run: curl https://${{ vars.APP_DOMAIN }}/healthz

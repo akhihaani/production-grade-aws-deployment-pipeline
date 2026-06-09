@@ -1,7 +1,7 @@
 # S3 Bucket + DynamoDB for tfstate
 
 resource "aws_s3_bucket" "memos_state" {
-  bucket = "memos-tfstate-310829530244"
+  bucket = "memos-tfstate-${var.account_id}"
 
   tags = local.tags
 }
@@ -46,7 +46,7 @@ resource "aws_dynamodb_table" "memos_locks" {
 # S3 bucket for logs
 
 resource "aws_s3_bucket" "memos_lb_logs_bucket_id" {
-  bucket = "memos-lb-logs-310829530244"
+  bucket = "memos-lb-logs-${var.account_id}"
 
   tags = local.tags
 }
@@ -96,7 +96,7 @@ data "aws_elb_service_account" "main" {}
 # Route53 Hosted Zone
 
 resource "aws_route53_zone" "memos_hosted_zone" {
-  name = "memos.abuniyyah.uk"
+  name = var.domain
 
   tags = local.tags
 }
@@ -144,7 +144,7 @@ resource "aws_iam_role" "memos_github_role" {
             "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
           }
           StringLike = {
-            "token.actions.githubusercontent.com:sub" = "repo:akhihaani/ecs-project:*"
+            "token.actions.githubusercontent.com:sub" = "repo:${var.github_repo}:*"
           }
         }
       },

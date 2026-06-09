@@ -11,3 +11,7 @@ variable "memos_alb_dns_name" {
 variable "memos_alb_zone_id" {
   type = string
 }
+
+variable "memos_domain" {
+  type = string
+}

@@ -44,7 +44,7 @@ resource "aws_ecs_task_definition" "memos_task_def" {
   container_definitions = jsonencode([
     {
       name      = "memos"
-      image     = "${var.memos_repo_url}:09495e4"
+      image     = "${var.memos_repo_url}:latest"
       cpu       = 256
       memory    = 512
       essential = true
@@ -58,7 +58,7 @@ resource "aws_ecs_task_definition" "memos_task_def" {
         logDriver = "awslogs"
         options = {
           "awslogs-group"         = aws_cloudwatch_log_group.memos_cloudwatch_log_group.name
-          "awslogs-region"        = "eu-west-2"
+          "awslogs-region"        = var.region
           "awslogs-stream-prefix" = "memos"
         }
       },

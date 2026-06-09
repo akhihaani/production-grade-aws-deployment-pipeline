@@ -8,15 +8,15 @@ terraform {
 }
 
 provider "aws" {
-  region = "eu-west-2"
+  region = var.region
 }
 
 terraform {
   required_version = ">= 1.1.9"
   backend "s3" {
-    bucket         = "memos-tfstate-310829530244"
+    bucket         = "memos-tfstate-${var.account_id}"
     key            = "bootstrap/terraform.tfstate"
-    region         = "eu-west-2"
+    region         = var.region
     dynamodb_table = "terraform-state-locks"
     encrypt        = true
   }

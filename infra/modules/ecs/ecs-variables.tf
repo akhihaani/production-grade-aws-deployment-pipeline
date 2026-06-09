@@ -19,3 +19,7 @@ variable "memos_ecs_task_sg" {
 variable "memos_public_subnets" {
   type = list(string)
 }
+
+variable "region" {
+  type = string
+}

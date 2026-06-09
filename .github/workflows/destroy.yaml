@@ -18,8 +18,8 @@ jobs:
       - name: Configure AWS
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::310829530244:role/memos_github_role
-          aws-region: eu-west-2
+          role-to-assume: arn:aws:iam::${{ vars.AWS_ROLE_ARN }}:role/memos_github_role
+          aws-region: ${{ vars.AWS_REGION }}
 
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v4

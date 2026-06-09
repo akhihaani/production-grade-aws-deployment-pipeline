@@ -1,13 +1,13 @@
 # Route53 Hosted Zone
 
 data "aws_route53_zone" "memos_hosted_zone" {
-  name = "memos.abuniyyah.uk"
+  name = var.memos_domain
 }
 
 # - ACM certificate
 
 resource "aws_acm_certificate" "memos_cert" {
-  domain_name       = "memos.abuniyyah.uk"
+  domain_name       = var.memos_domain
   validation_method = "DNS"
 
   lifecycle {
@@ -42,7 +42,7 @@ resource "aws_acm_certificate_validation" "memos_cert_valid" {
 
 resource "aws_route53_record" "memos_alb_alias" {
   zone_id = data.aws_route53_zone.memos_hosted_zone.zone_id
-  name    = "memos.abuniyyah.uk"
+  name    = var.memos_domain
   type    = "A"
 
   alias {

@@ -24,14 +24,14 @@ jobs:
       - name: Configure AWS
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::310829530244:role/memos_github_role
-          aws-region: eu-west-2
+          role-to-assume: arn:aws:iam::${{ vars.AWS_ROLE_ARN }}:role/memos_github_role
+          aws-region: ${{ vars.AWS_REGION }}
 
       - name: Login to ECR
         uses: aws-actions/amazon-ecr-login@v2
 
       - name: Build and Tag Docker image
-        run: docker build -t 310829530244.dkr.ecr.eu-west-2.amazonaws.com/memos:${{ github.sha }} -f dockerfile ./memos
+        run: docker build -t ${{ vars.ECR_REPO }}:${{ github.sha }} -f dockerfile ./memos
 
       - name: Push image to ECR
-        run: docker push 310829530244.dkr.ecr.eu-west-2.amazonaws.com/memos:${{ github.sha }}
+        run: docker push ${{ vars.ECR_REPO }}:${{ github.sha }}

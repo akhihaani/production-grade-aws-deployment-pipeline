@@ -8,7 +8,6 @@ terraform {
 }
 
 provider "aws" {
-  region = "eu-west-2" ## London
-  # Configuration options
+  region = var.region
 }
 
