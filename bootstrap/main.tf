@@ -3,6 +3,8 @@
 resource "aws_s3_bucket" "memos_state" {
   bucket = "memos-tfstate-${var.account_id}"
 
+  force_destroy = true
+
   tags = local.tags
 }
 
@@ -47,6 +49,8 @@ resource "aws_dynamodb_table" "memos_locks" {
 
 resource "aws_s3_bucket" "memos_lb_logs_bucket_id" {
   bucket = "memos-lb-logs-${var.account_id}"
+
+  force_destroy = true
 
   tags = local.tags
 }
@@ -110,6 +114,8 @@ resource "aws_ecr_repository" "memos_repo" {
   image_scanning_configuration {
     scan_on_push = true
   }
+
+  force_delete = true
 
   tags = local.tags
 }
