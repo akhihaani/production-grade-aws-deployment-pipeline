@@ -4,4 +4,5 @@ build.log
 terraform.tfstate
 .terraform
 terraform.tfstate.backup
-task-definition.rendered.jsonbootstrap/backend.tf
+task-definition.rendered.json
+bootstrap/backend.tf
