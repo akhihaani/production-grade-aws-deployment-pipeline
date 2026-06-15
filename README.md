@@ -111,6 +111,13 @@ Then:
 ```
 aws configure
 ```
+
+You will need an IAM User to connect to the CLI
+In the AWS Console, go to IAM > Users > Create User
+Give the User whatever permissions you wish
+Once the user is created select it and go to the 'Security Credentials Tab'
+Scroll down to Access Keys and create one, this gives you the values you need for CLI connection
+
 Follow the prompts and enter the following details:
 - 1. AWS Access Key ID: Paste the Access Key associated with your IAM user 
 - 2. AWS Secret Access Key: Paste the Secret Key associated with your IAM user
@@ -122,9 +129,10 @@ You also need to own a domain
 Go to any domain registrar, such as cloudflare, and purchase a domain.
 
 GitHub Repository:
-Fork the GitHub repository and pull it to your working folder
+Create a fork of the GitHub repository
+Use the 'Fork' button on the top right of the repository page
 
-Use:
+Then pull the repo to your local machine with:
 ```
 git clone --recurse-submodules <your-fork-url>
 cd <your-fork>
@@ -145,14 +153,10 @@ Use:
 ```
 cd bootstrap
 terraform init
-terraform apply
-```
-
-Rename 'bootstrap/backend.tf.disabled' to 'bootstrap/backend.tf'
-Run:
-```
-terraform init -migrate-state
-terraform apply
+terraform apply -auto-approve
+mv backend.tf.disabled backend.tf
+terraform init -migrate-state -force-copy
+terraform apply -auto-approve
 ```
 
 **Manual**:
@@ -160,43 +164,51 @@ terraform apply
 - Those must be pasted as NS records into the domain registrar of the domain (or subdomain) you own
 - This delegates authority over it to route 53
 
-**build.yaml**:
+**GitHub Actions**:
+There are three workflows that can be used:
+- build.yaml: Will create a docker image and push it to Amazon ECR. Is activated manually in the GitHub Actions Tab or by pushing to GitHub
+- deploy.yaml: Will terraform apply 'Infra'. Is activated manually in the GitHub Actions Tab
+- destroy.yaml: Will terraform destroy 'Infra'. Is activated manually in the GitHub Actions Tab
+
+Because you forked the repository you need to enable workflows in the GitHub Actions Tab
+[Open your repository's Actions tab](../../actions)
+
+Notes:
+- build.yaml must be run and completed before using deploy.yaml
+- Certificate validation in deploy.yaml can take 10-15 minutes, so you will need to wait
+
+**Terminal commands**:
 Use:
 ```
-git push origin main
+gh repo set-default <your-fork>
 ```
 
-This will activate the build.yaml workflow
-which will create a docker image and push it to Amazon ECR
-
-The workflow can also be activated manually in the GitHub actions menu
-build.yaml must be run and completed before using deploy.yaml
-
-**deploy.yaml**:
-In the GitHub actions menu, activate deploy.yaml
-This can only be done manually
-
-Certificate validation can take 10-15 minutes, so you will need to wait
-
-**terminal commands**:
 You can use the following commands to run the workflows from the terminal:
 ```
 gh workflow run build.yaml
+```
+
+```
 gh workflow run deploy.yaml
+```
+
+```
 gh workflow run destroy.yaml
 ```
 
 You can also monitor your workflows from the terminal using:
 ```
 gh run list
-# See recent runs + their status
+  # See recent runs + their status
+
 gh run watch
-# live-follow the latest run until it finishes
+  # live-follow the latest run until it finishes
+
 gh run view --log
-# Full logs of a run
+  # Full logs of a run
 ```
 
-**verify**:
+**Verify**:
 ```
 Visit [https://<domain-name>] and check if it is working
 [https://<domain-name>/healthz] can be used for health status checking
