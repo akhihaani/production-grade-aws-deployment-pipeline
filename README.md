@@ -57,7 +57,7 @@ CI/CD:
 ## Repository structure
 ```
 .
-├─ dockerfile                          # multi-stage build for the memos image
+├─ Dockerfile                          # multi-stage build for the memos image
 ├─ .dockerignore
 ├─ .gitignore
 ├─ .gitmodules                         # pins the memos submodule
@@ -238,7 +238,7 @@ Open docker engine
 
 Run in terminal:
 ```
-docker build -t memos -f dockerfile ./memos
+docker build -t memos -f Dockerfile ./memos
 docker run --rm --name memos -p 8081:8081 -v ~/.memos:/var/opt/memos memos
 ```
 
