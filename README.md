@@ -144,6 +144,13 @@ git clone --recurse-submodules <your-fork-url>
 cd <your-fork>
 ```
 
+Along with this you should update the app code
+```
+cd memos
+git pull origin main
+cd ..
+```
+
 ```
 gh auth login
 ```
