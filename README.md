@@ -228,14 +228,20 @@ Visit [https://<domain-name>] and check if it is working
 ```
 
 **Destroy**:
-When you are finished with the WHOLE project, use this:
+To just take the app offline, run this:
+```
+gh workflow run destroy.yaml
+gh run watch                    # Wait until destroy workflow finishes
+```
+
+To remove everything including the foundation, use this:
 ```
 gh workflow run destroy.yaml
 gh run watch                    # Wait until destroy workflow finishes
 cd bootstrap
+mv backend.tf backend.tf.disabled
+terraform init -migrate-state -force-copy
 terraform destroy -auto-approve
-cd ../..
-rm -rf <repo-name>
 ```
 
 Also remove the 4 NS Records you added to your domain on your domain registrar
